@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>Home</title>
+</head>
+<body>
+  <div class="bgImage"></div>
+  <div class="navbar">
+    <div class="button home">HOME</div>
+    <div class="button aboutUs"> ABOUT US</div>
+    <div class="button contactUs">CONTACT US</div>
+  </div>
+  <form class="popup-login">
+    <div class="popup-login-content">
+      <img class="close1" src="close.png" alt="close">
+      <img class="icon" src="./icon.png" alt="icon">
+      <br> <br><br>
+      
+      <input class="signin-email" type="text" placeholder="Email Address" required/>
+      <input class="signin-password" type="password" placeholder="Password" required autocomplete="current-password" />
+      <button class="authButton" type="submit">LOGIN</button> <br> <br>
+      <div class="bottom">
+        <a href="#" class="noaccount" style="text-decoration: none;"> Don't have an account ?</a>
+      </div>
+      <span class="or">OR</span>
+      <div class="social-login">
+        <img class="authButton1" src="loging.jpg" alt="login with Google" />
+        <img class="authButton2" src="loginfb.jpg" alt="login with fb" />
+      </div>
+      <div class="terms">
+        By logging in, you accept all the terms and conditions of the app.
+      </div>
+    </div>
+  </form>
+
+  <form class="popup-signup">
+    <div class="popup-signup-content">
+      <img class="close2" src="close.png" alt="close">
+      <img class="icon" src="./icon.png" alt="icon">
+      
+      <input class="signup-email" id="signup-email" type="text" placeholder="Email" required/>
+      <input class="signup-contact" id="signup-contact" type="text" placeholder="Contact" required/>
+      <input class="signup-username" id="signup-username" type="text" placeholder="Username" required/>
+      <input class="signup-usertype" id="signup-usertype" type="text" placeholder="Admin/Buyer" required/>
+      <input class="signup-password" id="signup-password" type="password" placeholder="Password" required autocomplete="new-password" />
+      <input class="signup-retype-password" id="signup-retype-password" type="password" placeholder="Confirm Password" required autocomplete="new-password" />
+
+      <button class="authButton" type="submit">Sign Up</button> <br>
+      <span class="marginset">OR</span>
+      <div class="social-login">
+        <img class="authButton3" src="loging.jpg" alt="login with Google" />
+        <img class="authButton4" src="loginfb.jpg" alt="login with fb" />
+      </div>
+      <div class="terms">
+        As you sign up, you accept all the terms and conditions of the app.
+      </div>
+    </div>
+  </form>
+
+  <div class="taglinebox">
+    <div class="logo">Book Movie Tickets</div>
+  </div>
+  <div class="signInbox">
+    <div class="boxButton login">Login</div>
+    <div class="boxButton signup">Sign Up</div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.querySelector(".popup-login").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.querySelector(".signin-email").value;
+      const password = document.querySelector(".signin-password").value;
+
+      try {
+        // Perform the login logic using your API or server-side authentication
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+
+        if (response.ok) {
+          // Login successful, you can handle the response data
+          const data = await response.json();
+          localStorage.setItem("jwt", data.token);
+          location.href = "./Movie Page/index.html";
+        } else {
+          // Handle login failure
+          throw new Error("Login failed. Please try again.");
+        }
+      } catch (error) {
+        // Handle login errors here
+        alert(error.message);
+      }
+
+      return false; // Return false to prevent the form submission from refreshing the page
+    });
+
+    document.querySelector(".popup-signup").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.querySelector(".signup-email").value;
+      const contact = document.querySelector(".signup-contact").value;
+      const username = document.querySelector(".signup-username").value;
+      const usertype = document.querySelector(".signup-usertype").value;
+      const password = document.querySelector(".signup-password").value;
+      const retypepassword = document.querySelector(".signup-retype-password").value;
+
+      if (password !== retypepassword) {
+        alert("Passwords don't match");
+        return;
+      }
+
+      // Send the email, contact, username, and password to your server for user registration
+      // Handle user registration using your local database logic
+      // Example: Make a fetch request to your server's signup endpoint
+
+      try {
+        const response = await fetch("/api/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            contact,
+            username,
+            password,
+          }),
+        });
+
+        if (response.ok) {
+          // Registration successful, you can handle the response data
+
+          localStorage.setItem("jwt", "example_token");
+          location.href = "./Movie Page/index.html";
+        } else {
+          throw new Error("Sign up successful");
+        }
+      } catch (error) {
+        // Handle sign-up errors here
+        alert(error.message);
+      }
+
+      return false; // Return false to prevent the form submission from refreshing the page
+    });
+  </script>
+</body>
+</html>
